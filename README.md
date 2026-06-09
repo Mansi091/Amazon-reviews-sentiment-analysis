@@ -10,7 +10,7 @@ An interactive, dark-themed Streamlit web dashboard and Machine Learning pipelin
 * **Ratings Trend Over Time**: An interactive line chart tracking average ratings across years.
 * **Real-time Predictor**: Input custom product reviews to receive immediate positive, neutral, or negative classifications alongside confidence level breakdown charts.
 * **Optimized Pipeline**: Designed to handle large-scale datasets efficiently by using stratified data sampling and caching model/vectorizer artifacts.
-* **Advanced NLP**: Performs HTML cleaning, stop-word filtering, and NLTK-based Lemmatization to reduce words to their base form.
+* **NLP**: Performs HTML cleaning, stop-word filtering, and NLTK-based Lemmatization to reduce words to their base form.
 
 ---
 
