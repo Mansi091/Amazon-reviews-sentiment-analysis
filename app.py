@@ -6,6 +6,14 @@ import pickle
 import matplotlib.pyplot as plt
 import seaborn as sns
 from wordcloud import WordCloud
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+
+nltk.download('wordnet', quiet=True)
+nltk.download('stopwords', quiet=True)
+lemmatizer = WordNetLemmatizer()
+stop_words = set(stopwords.words('english'))
 
 st.set_page_config(
     page_title="Amazon Reviews Sentiment Analyzer",
@@ -117,8 +125,9 @@ def clean_text(text):
     text = re.sub(r'<[^>]+>', ' ', text)
     text = text.lower()
     text = re.sub(r'[^a-zA-Z\s]', '', text)
-    text = re.sub(r'\s+', ' ', text).strip()
-    return text
+    tokens = text.split()
+    cleaned_tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words]
+    return " ".join(cleaned_tokens)
 
 @st.cache_resource
 
@@ -201,6 +210,30 @@ if page == "Dashboard & EDA":
             ax.pie(sentiment_counts, labels=sentiment_counts.index, autopct='%1.1f%%',
                    colors=colors, textprops={'color': 'white'}, startangle=140)
             st.pyplot(fig)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.subheader("📈 Average Rating Over Time")
+        df_sample['Date'] = pd.to_datetime(df_sample['Time'], unit='s')
+        df_sample['Year'] = df_sample['Date'].dt.year
+        yearly_avg = df_sample.groupby('Year')['Score'].mean().reset_index()
+        
+        fig_line, ax_line = plt.subplots(figsize=(10, 4))
+        fig_line.patch.set_facecolor('#0e1117')
+        ax_line.set_facecolor('#0e1117')
+        sns.lineplot(data=yearly_avg, x='Year', y='Score', color='#ff9900', marker='o', linewidth=2.5, ax=ax_line)
+        ax_line.set_title("Average Star Rating by Year", color='white', fontsize=12, pad=10)
+        ax_line.set_xlabel("Year", color='white')
+        ax_line.set_ylabel("Average Rating", color='white')
+        ax_line.tick_params(colors='white')
+        ax_line.xaxis.label.set_color('white')
+        ax_line.yaxis.label.set_color('white')
+        ax_line.spines['bottom'].set_color('white')
+        ax_line.spines['left'].set_color('white')
+        ax_line.spines['top'].set_visible(False)
+        ax_line.spines['right'].set_visible(False)
+        ax_line.grid(color='rgba(255, 255, 255, 0.1)', linestyle='--')
+        st.pyplot(fig_line)
+        
         st.markdown("<br>", unsafe_allow_html=True)
         st.subheader("☁️ Review Word Clouds")
         wc_sentiment = st.radio("Select Sentiment for Word Cloud", ["Positive Reviews (4-5 Stars)", "Negative Reviews (1-2 Stars)"], horizontal=True)

@@ -3,10 +3,18 @@ import numpy as np
 import re
 import pickle
 import time
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, accuracy_score
+
+nltk.download('wordnet', quiet=True)
+nltk.download('stopwords', quiet=True)
+lemmatizer = WordNetLemmatizer()
+stop_words = set(stopwords.words('english'))
 
 def clean_text(text):
     if not isinstance(text, str):
@@ -14,14 +22,15 @@ def clean_text(text):
     text = re.sub(r'<[^>]+>', ' ', text)
     text = text.lower()
     text = re.sub(r'[^a-zA-Z\s]', '', text)
-    text = re.sub(r'\s+', ' ', text).strip()
-    return text
+    tokens = text.split()
+    cleaned_tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words]
+    return " ".join(cleaned_tokens)
 
 def main():
     start_time = time.time()
     csv_path = "Reviews.csv"
     print("Loading dataset...")
-    cols = ['Score', 'Summary', 'Text', 'HelpfulnessNumerator', 'HelpfulnessDenominator']
+    cols = ['Score', 'Summary', 'Text', 'HelpfulnessNumerator', 'HelpfulnessDenominator', 'Time']
     df = pd.read_csv(csv_path, usecols=cols)
     print(f"Loaded {len(df)} rows.")
     sample_eda = df.sample(n=10000, random_state=42)
@@ -58,7 +67,7 @@ def main():
     X_train_tfidf = vectorizer.fit_transform(X_train)
     X_test_tfidf = vectorizer.transform(X_test)
     print("Training Logistic Regression model...")
-    model = LogisticRegression(max_iter=1000, C=1.0, random_state=42)
+    model = LogisticRegression(max_iter=1000, C=1.0, random_state=42, class_weight='balanced')
     model.fit(X_train_tfidf, y_train)
     print("Evaluating model...")
     y_pred = model.predict(X_test_tfidf)
