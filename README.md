@@ -1,26 +1,27 @@
 # Amazon Reviews Sentiment Analysis & Dashboard
 
-An interactive, dark-themed Streamlit web dashboard and Machine Learning pipeline for predicting and exploring sentiment in Amazon fine food reviews. The model uses **TF-IDF Vectorization** (unigrams & bigrams) paired with a **Multinomial Logistic Regression** classifier to achieve an overall test accuracy of **87.08%**.
+An interactive, dark-themed Streamlit web dashboard and Machine Learning pipeline for predicting and exploring sentiment in Amazon fine food reviews. The model uses **TF-IDF Vectorization** (unigrams & bigrams) paired with a **Multinomial Logistic Regression** classifier with balanced class weights to achieve an overall test accuracy of **82.61%** while significantly boosting performance on minority classes.
 
 ---
 
 ## 🚀 Key Features
 
-* **Interactive Web Dashboard**: Built with Streamlit, presenting clean metrics, ratings distributions, and dynamic word clouds.
+* **Interactive Web Dashboard**: Built with Streamlit, presenting key metrics, ratings distributions, and dynamic word clouds.
+* **Ratings Trend Over Time**: An interactive line chart tracking average ratings across years.
 * **Real-time Predictor**: Input custom product reviews to receive immediate positive, neutral, or negative classifications alongside confidence level breakdown charts.
 * **Optimized Pipeline**: Designed to handle large-scale datasets efficiently by using stratified data sampling and caching model/vectorizer artifacts.
-* **Preprocessed NLP**: Cleans HTML tags, punctuation, numbers, and normalizes text for classification accuracy.
+* **Advanced NLP**: Performs HTML cleaning, stop-word filtering, and NLTK-based Lemmatization to reduce words to their base form.
 
 ---
 
 ## 📊 Model Performance
 
-Trained on a representative stratified sample of **50,000** reviews:
+Trained on a representative stratified sample of **50,000** reviews (balanced class weights applied):
 
-* **Overall Accuracy**: `87.08%`
-* **Positive (4-5 Stars) F1-Score**: `0.93`
-* **Negative (1-2 Stars) F1-Score**: `0.71`
-* **Neutral (3 Stars) F1-Score**: `0.26`
+* **Overall Accuracy**: `82.61%`
+* **Positive (4-5 Stars) F1-Score**: `0.91`
+* **Negative (1-2 Stars) F1-Score**: `0.70`
+* **Neutral (3 Stars) F1-Score**: `0.39` (improved from 0.26 via balanced weighting)
 
 ---
 
