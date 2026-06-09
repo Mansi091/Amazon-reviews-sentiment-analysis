@@ -146,8 +146,9 @@ st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Dashboard & EDA", "Sentiment Predictor"])
 
 model, vectorizer = load_model_artifacts()
-
 df_sample = load_sample_data()
+if model is not None and vectorizer is not None:
+    st.sidebar.success("Model loaded successfully!")
 
 if page == "Dashboard & EDA":
     st.title("Amazon Reviews Sentiment Dashboard")
