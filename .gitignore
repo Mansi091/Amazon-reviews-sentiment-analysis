@@ -1,0 +1,16 @@
+# Ignore raw dataset (too large for GitHub)
+Reviews.csv
+
+# Python cached files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local environments
+.venv/
+venv/
+env/
+
+# Streamlit config
+.streamlit/
