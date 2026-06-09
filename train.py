@@ -72,6 +72,7 @@ def main():
         pickle.dump(model, f)
     with open("vectorizer.pkl", "wb") as f:
         pickle.dump(vectorizer, f)
+    print("Model files successfully serialized and saved.")
     print(f"Done! Total time: {time.time() - start_time:.2f} seconds.")
 
 if __name__ == "__main__":
